@@ -16,18 +16,18 @@ type User struct {
 }
 
 type UserRegisterRequest struct {
-	FullName string `json:"full_name" valid:"required~Full name is required"`
-	Email    string `json:"email" valid:"required~Your email is required,email~Invalid email format"`
-	Password string `json:"password" form:"password" valid:"required~Your password is required,minstringlength(6)~Password has to have a minimum length of 6 characters"`
+	FullName string `json:"full_name" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" form:"password" binding:"required,min=6"`
 }
 
 type UserLoginRequest struct {
-	Email    string `json:"email" valid:"required~Your email is required,email~Invalid email format"`
-	Password string `json:"password" form:"password" valid:"required~Your password is required,minstringlength(6)~Password has to have a minimum length of 6 characters"`
+	Email    string `json:"email" bindig:"required,email"`
+	Password string `json:"password" form:"password" binding:"required,min=6"`
 }
 
 type UserBalanceRequest struct {
-	Balance int `json:"balance" valid:"required~Your balance is required,range(0|50000000)~balance has reach the limit"`
+	Balance int `json:"balance"  binding:"required,min=0,max=500000000"`
 }
 type UserRegisterResponse struct {
 	GormModel
