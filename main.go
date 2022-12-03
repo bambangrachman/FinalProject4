@@ -26,7 +26,12 @@ func main() {
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService, auth)
 
+	productRepository := repository.NewProductRepository(db)
+	productService := service.NewProductService(productRepository)
+	productHandler := handler.NewProductHandler(productService)
+
 	route.UserRouter(router, userHandler, db)
+	route.ProductRouter(router, productHandler, db)
 
 	router.Run(":" + cfg.ServerPort)
 }

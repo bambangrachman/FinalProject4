@@ -105,3 +105,14 @@ func (s *jwtService) AuthMiddleware(authService Service, userRepository reposito
 		c.Set("currentUserRole", getRole)
 	}
 }
+
+func GetUserID(ctx *gin.Context) (int, bool) {
+	var userID int
+	id, ok := ctx.Get("userID")
+	if !ok {
+		return userID, false
+	}
+	userID = id.(int)
+
+	return userID, true
+}
