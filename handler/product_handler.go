@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"finalproject4/helper"
 	"finalproject4/model"
 	"finalproject4/service"
 	"log"
@@ -31,7 +30,7 @@ func NewProductHandler(productService service.ProductService) *productHandler {
 func (p *productHandler) AddProduct(ctx *gin.Context) {
 	var product model.AddProduct
 
-	role_user := ctx.MustGet("role").(string)
+	role_user := ctx.MustGet("currentUserRole").(string)
 
 	err := ctx.ShouldBindJSON(&product)
 	if err != nil {
@@ -41,7 +40,10 @@ func (p *productHandler) AddProduct(ctx *gin.Context) {
 
 	productData, err := p.productService.AddProduct(role_user, product)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		log.Println(err.Error())
 		return
 	}
 
@@ -59,7 +61,7 @@ func (p *productHandler) AddProduct(ctx *gin.Context) {
 func (p *productHandler) EditProduct(ctx *gin.Context) {
 	var editProduct model.EditProduct
 
-	role_user := ctx.MustGet("role").(string)
+	role_user := ctx.MustGet("currentUserRole").(string)
 
 	err := ctx.ShouldBindJSON(&editProduct)
 	if err != nil {
@@ -70,7 +72,10 @@ func (p *productHandler) EditProduct(ctx *gin.Context) {
 	id, err := strconv.Atoi(idString)
 	productData, err := p.productService.EditProduct(id, role_user, editProduct)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": err.Error(),
+		})
+		log.Println(err.Error())
 		return
 	}
 
@@ -87,7 +92,7 @@ func (p *productHandler) EditProduct(ctx *gin.Context) {
 }
 
 func (p *productHandler) DeleteProduct(ctx *gin.Context) {
-	role_user := ctx.MustGet("role").(string)
+	role_user := ctx.MustGet("currentUserRole").(string)
 	idString := ctx.Param("id")
 	id, _ := strconv.Atoi(idString)
 
@@ -106,16 +111,14 @@ func (p *productHandler) DeleteProduct(ctx *gin.Context) {
 }
 
 func (p *productHandler) ViewProduct(ctx *gin.Context) {
-	id, _ := helper.GetUserID(ctx)
-	_, err := p.productService.ViewProduct(id)
+	product, err := p.productService.ViewProduct()
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
 		})
 		log.Println(err.Error())
 		return
 	}
-
-	formatter := model.Product(model.Product{})
+	formatter := []model.Product(product)
 	ctx.JSON(http.StatusOK, formatter)
 }

@@ -10,7 +10,7 @@ type ProductRepository interface {
 	AddProduct(product model.Product) (model.Product, error)
 	EditProduct(product model.Product) (model.Product, error)
 	DeleteProduct(product model.Product) error
-	ViewProduct(id int) ([]model.Product, error)
+	ViewProduct() ([]model.Product, error)
 	FindById(id int) (model.Product, error)
 }
 
@@ -42,7 +42,7 @@ func (p *productRepository) DeleteProduct(product model.Product) error {
 	return nil
 }
 
-func (p *productRepository) ViewProduct(id int) ([]model.Product, error) {
+func (p *productRepository) ViewProduct() ([]model.Product, error) {
 	var products []model.Product
 	err := p.db.Debug().Find(&products).Error
 	if err != nil {

@@ -1,6 +1,11 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/asaskevich/govalidator"
+	"gorm.io/gorm"
+)
 
 type Product struct {
 	GormModel
@@ -41,4 +46,26 @@ type ResponseEditProduct struct {
 	CategoryID int       `json:"category_id"`
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
+}
+
+func (p *Product) BeforeCreate(tx *gorm.DB) (err error) {
+	_, errCreate := govalidator.ValidateStruct(p)
+	if errCreate != nil {
+		err = errCreate
+		return
+	}
+
+	err = nil
+	return
+}
+
+func (p *Product) BeforeUpdate(tx *gorm.DB) (err error) {
+	_, errUpdate := govalidator.ValidateStruct(p)
+	if errUpdate != nil {
+		err = errUpdate
+		return
+	}
+
+	err = nil
+	return
 }

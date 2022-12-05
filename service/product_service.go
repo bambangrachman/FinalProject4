@@ -10,7 +10,7 @@ type ProductService interface {
 	AddProduct(role_user string, product model.AddProduct) (model.Product, error)
 	EditProduct(id int, role_user string, product model.EditProduct) (model.Product, error)
 	DeleteProduct(role_user string, id int) error
-	ViewProduct(id int) ([]model.Product, error)
+	ViewProduct() ([]model.Product, error)
 }
 
 type productService struct {
@@ -76,8 +76,8 @@ func (p *productService) DeleteProduct(role_user string, id int) error {
 	return nil
 }
 
-func (p *productService) ViewProduct(id int) ([]model.Product, error) {
-	product, err := p.productRepository.ViewProduct(id)
+func (p *productService) ViewProduct() ([]model.Product, error) {
+	product, err := p.productRepository.ViewProduct()
 	if err != nil {
 		return product, err
 	}
