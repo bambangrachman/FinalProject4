@@ -30,6 +30,11 @@ func main() {
 	productService := service.NewProductService(productRepository)
 	productHandler := handler.NewProductHandler(productService)
 
+	transactionHistoryRepository := repository.NewTransactionHistoryRepository(db)
+	transactionHistoryService := service.NewTransactionHistoryService(transactionHistoryRepository)
+	transactionHistoryHandler := handler.NewTransactionHistoryHandler(transactionHistoryService)
+
+	route.TransactionRouter(router, transactionHistoryHandler, db)
 	route.UserRouter(router, userHandler, db)
 	route.ProductRouter(router, productHandler, db)
 
