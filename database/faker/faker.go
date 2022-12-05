@@ -16,7 +16,7 @@ func Admin(db *gorm.DB) *model.User {
 		},
 		Fullname: "Admin",
 		Email:    "admin@admin.com",
-		Password: "$2a$08$6e4EqvAc.Xjt1pYq0UwRpu7kA4R4xxggC8afu2u2boD2ld2K9Dkxu", // password123
+		Password: "password123", // password123
 		Role:     "admin",
 	}
 }

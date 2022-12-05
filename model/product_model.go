@@ -12,7 +12,7 @@ type Product struct {
 	Title      string `gorm:"not null" json:"title" form:"title" valid:"required~Product name is required"`
 	Stock      int    `gorm:"not null" json:"stock" form:"stock" valid:"required~Stock is required, range(5|999999)~Minimum product stock is 5"`
 	Price      int    `gorm:"not null" json:"price" form:"price" valid:"required~Product Price is required, range(0|50000000)~Product Price is out of range"`
-	CategoryID int    `json:"category_id" form:"category_id"`
+	CategoryID int    `json:"category_id" form:"category_id" gorm:"foreignkey:category_id;embedded"`
 }
 
 type AddProduct struct {

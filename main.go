@@ -26,6 +26,10 @@ func main() {
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService, auth)
 
+	categoryRepository := repository.NewCategoriesRepository(db)
+	categoryService := service.NewCategoriesService(categoryRepository)
+	categoryHandler := handler.NewCategoriesHandler(categoryService)
+
 	productRepository := repository.NewProductRepository(db)
 	productService := service.NewProductService(productRepository)
 	productHandler := handler.NewProductHandler(productService)
@@ -35,6 +39,7 @@ func main() {
 	transactionHistoryHandler := handler.NewTransactionHistoryHandler(transactionHistoryService)
 
 	route.TransactionRouter(router, transactionHistoryHandler, db)
+	route.CategoryRouter(router, categoryHandler, db)
 	route.UserRouter(router, userHandler, db)
 	route.ProductRouter(router, productHandler, db)
 
