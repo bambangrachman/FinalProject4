@@ -29,6 +29,13 @@ func (th *transactionHistoryHandler) GetAllTransactionHistory(ctx *gin.Context) 
 
 	role := ctx.MustGet("currentUserRole").(string)
 	currentUser := ctx.MustGet("currentUser").(model.User)
+	if role == "customer" {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"message": "You are not authorized to access this endpoint",
+		})
+		return
+	}
+
 	id := int(currentUser.ID)
 	transactionHistory, err := th.transactionHistoryService.GetAllTransactionHistory(role, id)
 	if err != nil {

@@ -8,7 +8,6 @@ import (
 
 type TransactionHistoryService interface {
 	GetAllTransactionHistory(role string, UserID int) ([]model.TransactionHistory, error)
-	GetTransactionHistoryByUserId(UserID int) ([]model.TransactionHistory, error)
 	CreateTransactionHistory(transactionHistory model.TransactionHistoryInput, UserID int) (model.TransactionHistory, error)
 	DeleteTransactionHistory(id_task int, UserID int) error
 }
@@ -50,18 +49,6 @@ func (s *transactionHistoryService) GetAllTransactionHistory(role string, UserID
 		return filteredTransactionHistory, nil
 	}
 	return []model.TransactionHistory{}, errors.New("Login first only user or admin role access this")
-}
-
-func (s *transactionHistoryService) GetTransactionHistoryByUserId(UserID int) ([]model.TransactionHistory, error) {
-	var transaction []model.TransactionHistory
-	err := s.transactionHistoryRepository.GetTransactionHistoryByUserId(&transaction)
-	if err != nil {
-		return transaction, err
-	}
-	if len(transaction) == 0 {
-		return transaction, errors.New("no transaction history")
-	}
-	return transaction, nil
 }
 
 func (s *transactionHistoryService) CreateTransactionHistory(transaction model.TransactionHistoryInput, UserID int) (model.TransactionHistory, error) {
