@@ -15,6 +15,6 @@ func CategoryRouter(router *gin.Engine, handler handler.CategoriesHandler, db *g
 
 	router.POST("/categories", auth.AuthMiddleware(auth, userRepo), handler.CreateCategory)
 	router.GET("/categories", auth.AuthMiddleware(auth, userRepo), handler.GetAllCategory)
-	router.PUT("/categories/:id", auth.AuthMiddleware(auth, userRepo), handler.PatchCategory)
+	router.PATCH("/categories/:id", auth.AuthMiddleware(auth, userRepo), handler.PatchCategory)
 	router.DELETE("/categories/:id", auth.AuthMiddleware(auth, userRepo), handler.DeleteCategory)
 }

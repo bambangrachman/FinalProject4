@@ -11,7 +11,7 @@ type CategoriesRepository interface {
 	GetAllCategory() ([]model.Category, error)
 	GetCategoryByID(id int) (model.Category, error)
 	UpdateCategory(id int, categories model.Category) (model.Category, error)
-	DeleteCategory(id int) error
+	DeleteCategory(category model.Category) error
 }
 
 type categoriesRepository struct {
@@ -35,7 +35,7 @@ func (r *categoriesRepository) GetAllCategory() ([]model.Category, error) {
 
 func (r *categoriesRepository) GetCategoryByID(id int) (model.Category, error) {
 	var category model.Category
-	err := r.db.Find(&category, id).Error
+	err := r.db.Preload("Products").Find(&category, id).Error
 	return category, err
 }
 
@@ -44,7 +44,13 @@ func (r *categoriesRepository) UpdateCategory(id int, category model.Category) (
 	return category, err
 }
 
-func (r *categoriesRepository) DeleteCategory(id int) error {
-	err := r.db.Where("id = ?", id).Delete(&model.Category{}).Error
+func (r *categoriesRepository) DeleteCategory(category model.Category) error {
+	err := r.db.Delete(&category.Products).Error
+	if err != nil {
+		err = r.db.Delete(&category).Error
+		return err
+	}
+	err = r.db.Delete(&category).Error
+	// err = r.db.Where("id = ?", id).Delete(&model.Category{}).Error
 	return err
 }

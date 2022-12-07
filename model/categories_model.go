@@ -6,7 +6,7 @@ type Category struct {
 	GormModel
 	Type                string    `json:"type" gorm:"not null"`
 	Sold_product_amount int       `json:"sold_product_amount"`
-	Products            []Product `json:"products"`
+	Products            []Product `json:"products" gorm:"constraint:OnDelete:SET NULL;"`
 }
 
 type CategoryInput struct {

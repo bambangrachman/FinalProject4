@@ -72,7 +72,7 @@ func (s *categoriesService) DeleteCategory(role_user string, id_category int) er
 		return errors.New("category not found")
 	}
 
-	err = s.CategoriesRepository.DeleteCategory(id_category)
+	err = s.CategoriesRepository.DeleteCategory(categoryData)
 	if err != nil {
 		return err
 	}
