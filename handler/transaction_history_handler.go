@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"finalproject4/helper"
 	"finalproject4/model"
 	"finalproject4/service"
 	"log"
@@ -28,8 +27,9 @@ func NewTransactionHistoryHandler(transactionHistoryService service.TransactionH
 
 func (th *transactionHistoryHandler) GetAllTransactionHistory(ctx *gin.Context) {
 
-	role := ctx.MustGet("role").(string)
-	id := ctx.MustGet("userID").(int)
+	role := ctx.MustGet("currentUserRole").(string)
+	currentUser := ctx.MustGet("currentUser").(model.User)
+	id := int(currentUser.ID)
 	transactionHistory, err := th.transactionHistoryService.GetAllTransactionHistory(role, id)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -44,8 +44,9 @@ func (th *transactionHistoryHandler) GetAllTransactionHistory(ctx *gin.Context) 
 
 func (th *transactionHistoryHandler) GetTransactionHistoryByUserId(ctx *gin.Context) {
 
-	role := ctx.MustGet("role").(string)
-	id := ctx.MustGet("userID").(int)
+	role := ctx.MustGet("currentUserRole").(string)
+	currentUser := ctx.MustGet("currentUser").(model.User)
+	id := int(currentUser.ID)
 	transactionHistory, err := th.transactionHistoryService.GetAllTransactionHistory(role, id)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -61,7 +62,8 @@ func (th *transactionHistoryHandler) GetTransactionHistoryByUserId(ctx *gin.Cont
 
 func (th *transactionHistoryHandler) CreateTransactionHistory(ctx *gin.Context) {
 	var transactions model.TransactionHistoryInput
-	id, _ := helper.GetUserID(ctx)
+	currentUser := ctx.MustGet("currentUser").(model.User)
+	id := int(currentUser.ID)
 	err := ctx.ShouldBindJSON(&transactions)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -92,7 +94,8 @@ func (h *transactionHistoryHandler) DeleteTransactionHistory(ctx *gin.Context) {
 		log.Println(err.Error())
 		return
 	}
-	currentUserID, _ := helper.GetUserID(ctx)
+	currentUser := ctx.MustGet("currentUser").(model.User)
+	currentUserID := int(currentUser.ID)
 	err = h.transactionHistoryService.DeleteTransactionHistory(id, currentUserID)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{

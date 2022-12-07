@@ -47,7 +47,7 @@ func ConnectDB(dbUsername, dbPassword, dbHost, dbPort, dbName string) (*gorm.DB,
 		return nil, err
 	}
 
-	db.AutoMigrate(&model.User{}, &model.Category{}, &model.Product{})
+	db.AutoMigrate(&model.User{}, &model.Category{}, &model.Product{}, &model.TransactionHistory{})
 	seeder.DBSeed(db)
 	return db, nil
 }

@@ -33,7 +33,7 @@ func (s *transactionHistoryService) GetAllTransactionHistory(role string, UserID
 		}
 		return transactionHistory, nil
 	}
-	if role == "user" {
+	if role == "customer" {
 		err := s.transactionHistoryRepository.GetAllTransactionHistory(&transactionHistory)
 		if len(transactionHistory) == 0 {
 			return transactionHistory, errors.New("no transaction history")
