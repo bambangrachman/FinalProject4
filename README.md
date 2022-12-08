@@ -71,6 +71,126 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
             }
      ```
 
+**CATEGORIES**
+* GET :
+    * Untuk menampilkan semua data categories dapat dengan menggunakan url :
+    `http://localhost:8080/categories` atau `https://fp4-kelompok4.up.railway.app/categories` dengan method **GET**
+    * Untuk dapat mengakses endpointnya dibutuhkan autorisasi token yang didapatkan dari response endpoint user/login. (**Hanya bisa diakses oleh user dengan role ADMIN**)
+    * Output response yang dihasilkan adalah :
+        ```json
+        [
+            {
+                "id": 1,
+                "type": "Drinks",
+                "sold_product_amount": 0,
+                "created_at": "2022-12-07T08:08:19Z",
+                "updated_at": "2022-12-07T08:09:56Z",
+                "products": [
+                    {
+                        "id": 2,
+                        "CreatedAt": "2022-12-07T08:33:10Z",
+                        "UpdatedAt": "2022-12-07T08:33:10Z",
+                        "title": "Pocari Sweat",
+                        "price": 8500,
+                        "stock": 25
+                    },
+                    {
+                        "id": 4,
+                        "CreatedAt": "2022-12-07T08:36:15Z",
+                        "UpdatedAt": "2022-12-07T08:36:15Z",
+                        "title": "Yakult",
+                        "price": 9000,
+                        "stock": 55
+                    },
+                    {
+                        "id": 9,
+                        "CreatedAt": "2022-12-07T11:33:43Z",
+                        "UpdatedAt": "2022-12-07T11:33:43Z",
+                        "title": "NU",
+                        "price": 5000,
+                        "stock": 5
+                    }
+                ]
+            },
+            {
+                "id": 2,
+                "type": "Foods",
+                "sold_product_amount": 0,
+                "created_at": "2022-12-07T08:34:55Z",
+                "updated_at": "2022-12-07T08:34:55Z",
+                "products": [
+                    {
+                        "id": 3,
+                        "CreatedAt": "2022-12-07T08:35:29Z",
+                        "UpdatedAt": "2022-12-07T08:35:29Z",
+                        "title": "Taro rasa Potato BBQ",
+                        "price": 8000,
+                        "stock": 15
+                    },
+                    {
+                        "id": 10,
+                        "CreatedAt": "2022-12-07T11:34:25Z",
+                        "UpdatedAt": "2022-12-07T11:34:25Z",
+                        "title": "Cheetos",
+                        "price": 7000,
+                        "stock": 15
+                    }
+                ]
+            }
+        ]
+        ```
+
+* POST :
+    * Untuk membuat data categories baru dapat dengan menggunakan url :
+    `http://localhost:8080/categories` atau `https://fp4-kelompok4.up.railway.app/categories` dengan method **POST**
+    * Kemudian gunakan json berikut untuk membuat datanya:
+        ```json
+        {
+            "type" : "Tools"
+        }
+        ```
+    * Untuk akses endpointnya dibutuhkan request autorisasi token yang didapatkan dari response endpoint user/login. (**Hanya bisa diakses oleh user dengan role ADMIN**)
+    * Output response yang dihasilkan adalah :
+        ```json
+        {
+            "id": 6,
+            "type": "Tools",
+            "sold_product_amount": 0,
+            "created_at": "2022-12-08T20:05:25.038+07:00"
+        }
+        ```
+
+* PATCH :
+    * Untuk mengedit data categories dengan id 6 dapat dengan menggunakan url :
+    `http://localhost:8080/categories/6` atau `https://fp4-kelompok4.up.railway.app/categories/6` dengan method **PATCH**
+    * Kemudian gunakan json berikut untuk mengedit datanya:
+        ```json
+        {
+            "type" : "Tools Updated"
+        }
+        ```
+    * Untuk akses endpointnya dibutuhkan request autorisasi token yang didapatkan dari response endpoint user/login. (**Hanya bisa diakses oleh user dengan role ADMIN**)
+    * Output response yang dihasilkan adalah :
+        ```json
+        {
+            "id": 6,
+            "type": "Tools Updated",
+            "sold_product_amount": 0,
+            "updated_at": "2022-12-08T13:06:42Z"
+        }
+        ```
+* DELETE :
+    * Untuk menghapus data categories dengan id 6 dapat dengan menggunakan url :
+    `http://localhost:8080/categories/6` atau `https://fp4-kelompok4.up.railway.app/categories/6` dengan method **DELETE**
+    * Untuk akses endpointnya dibutuhkan request autorisasi token yang didapatkan dari response endpoint user/login. (**Hanya bisa diakses oleh user dengan role ADMIN**)
+    * Output response yang dihasilkan adalah :
+        ```json
+        {
+            "message": "category has been successfully deleted"
+        }
+        ```
+
+
 **PRODUCT**
 NOTES : Selain dari perintah **'GET'**, semua perintah lain hanya bisa diakses oleh admin. Jika customer melakukan perintah 'POST','DEL','PUT', maka akses akan ditolak dengan response seperti ini :
     ```json

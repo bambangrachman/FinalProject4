@@ -31,7 +31,7 @@ func (h *categoriesHandler) CreateCategory(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&categories)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please enter a valid type of category using the JSON object `type`"})
 		return
 	}
 
@@ -106,7 +106,7 @@ func (h *categoriesHandler) PatchCategory(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&category)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please enter a valid type of category using the JSON object `type`"})
 		return
 	}
 
