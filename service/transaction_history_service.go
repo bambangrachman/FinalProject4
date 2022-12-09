@@ -8,7 +8,7 @@ import (
 
 type TransactionHistoryService interface {
 	GetAllTransactionHistory(role string, UserID int) ([]model.TransactionHistory, error)
-	CreateTransactionHistory(transactionHistory model.TransactionHistoryInput, UserID int) (model.TransactionHistory, error)
+	CreateTransactionHistory(transactionHistory model.TransactionHistory, UserID int) (model.TransactionHistory, error)
 	DeleteTransactionHistory(id_task int, UserID int) error
 }
 
@@ -51,13 +51,12 @@ func (s *transactionHistoryService) GetAllTransactionHistory(role string, UserID
 	return []model.TransactionHistory{}, errors.New("Login first only user or admin role access this")
 }
 
-func (s *transactionHistoryService) CreateTransactionHistory(transaction model.TransactionHistoryInput, UserID int) (model.TransactionHistory, error) {
+func (s *transactionHistoryService) CreateTransactionHistory(transaction model.TransactionHistory, UserID int) (model.TransactionHistory, error) {
 
 	transactionHistory := model.TransactionHistory{
-		UserID:     UserID,
-		ProductID:  transaction.ProductID,
-		Quantity:   transaction.Quantity,
-		TotalPrice: 0,
+		UserID:    UserID,
+		ProductID: transaction.ProductID,
+		Quantity:  transaction.Quantity,
 	}
 	transactionResponse, err := s.transactionHistoryRepository.CreateTransactionHistory(transactionHistory)
 	if err != nil {

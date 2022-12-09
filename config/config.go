@@ -12,6 +12,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var db *gorm.DB
+
 func LoadConfig() model.Config {
 	err := godotenv.Load()
 	if err != nil {
@@ -50,4 +52,8 @@ func ConnectDB(dbUsername, dbPassword, dbHost, dbPort, dbName string) (*gorm.DB,
 	db.AutoMigrate(&model.User{}, &model.Category{}, &model.Product{}, &model.TransactionHistory{})
 	seeder.DBSeed(db)
 	return db, nil
+}
+
+func GetDB() *gorm.DB {
+	return db
 }

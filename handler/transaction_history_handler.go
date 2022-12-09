@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"finalproject4/config"
 	"finalproject4/model"
 	"finalproject4/service"
 	"log"
@@ -68,10 +69,17 @@ func (th *transactionHistoryHandler) GetTransactionHistoryByUserId(ctx *gin.Cont
 }
 
 func (th *transactionHistoryHandler) CreateTransactionHistory(ctx *gin.Context) {
-	var transactions model.TransactionHistoryInput
+	db := config.GetDB()
+	println("tes0")
+	transaction := model.TransactionHistory{}
+
+	println("tes1")
 	currentUser := ctx.MustGet("currentUser").(model.User)
+
 	id := int(currentUser.ID)
-	err := ctx.ShouldBindJSON(&transactions)
+	println("tes2")
+	// tes nya berhenti disini apakah shouldbindjsonnya ada yg salah?
+	err := ctx.ShouldBindJSON(&transaction)
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": err.Error(),
@@ -79,16 +87,69 @@ func (th *transactionHistoryHandler) CreateTransactionHistory(ctx *gin.Context) 
 		log.Println(err.Error())
 		return
 	}
-	transactionData, err := th.transactionHistoryService.CreateTransactionHistory(transactions, id)
+
+	//Cek Apakah product ada dan stok ada
+	Product := model.Product{}
+	err = db.First(&Product, transaction.ProductID).Error
+	println("tes3")
 	if err != nil {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
 			"message": err.Error(),
 		})
-		log.Println(err.Error())
+	}
+	if transaction.Quantity > Product.Stock {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": "Product stock is not enough",
+		})
 		return
 	}
-	formatter := model.FormatTransaction(transactionData)
-	ctx.JSON(http.StatusCreated, formatter)
+
+	transaction.TotalPrice = transaction.Quantity * Product.Price
+	println("tes4")
+	User := model.User{}
+	err = db.First(&User, id).Error
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+	}
+	if transaction.TotalPrice > int(User.Balance) {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": "Saldo is not enough",
+		})
+		return
+	}
+	println("tes5")
+	//Pengurangan stok product
+	db.Model(&Product).Where("id = ?", Product.ID).Update("stock", Product.Stock-transaction.Quantity)
+
+	//Pengurangan saldo User
+	db.Model(&User).Where("id = ?", User.ID).Update("balance", User.Balance-int(transaction.TotalPrice))
+	println("tes6")
+	//Create Transaction
+	transaction.UserID = id
+
+	err = db.Debug().Create(&transaction).Error
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Bad Request",
+			"message": err.Error(),
+		})
+		return
+	}
+	println("tes7")
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "Your have succesfully purchased the product",
+		"transaction_bill": `{
+			"total_price":Transaction.TotalPrice,
+			"quantity":Transaction.Quantity,
+			"Product_title":Product.Title,
+		}`,
+	})
 }
 
 func (h *transactionHistoryHandler) DeleteTransactionHistory(ctx *gin.Context) {
