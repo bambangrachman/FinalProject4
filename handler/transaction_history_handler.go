@@ -15,6 +15,7 @@ type TransactionHistoryHandler interface {
 	GetAllTransactionHistory(ctx *gin.Context)
 	GetTransactionHistoryByUserId(ctx *gin.Context)
 	CreateTransactionHistory(ctx *gin.Context)
+	CreateTest(ctx *gin.Context)
 	DeleteTransactionHistory(ctx *gin.Context)
 }
 
@@ -64,6 +65,29 @@ func (th *transactionHistoryHandler) GetTransactionHistoryByUserId(ctx *gin.Cont
 		return
 	}
 	formatter := model.FormatGetUserTransaction(transactionHistory)
+	ctx.JSON(http.StatusOK, formatter)
+
+}
+
+func (th *transactionHistoryHandler) CreateTest(ctx *gin.Context) {
+	var transaction model.TransactionHistoryInput
+
+	err := ctx.ShouldBindJSON(&transaction)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Please enter a valid type of product and quantity"})
+		return
+	}
+
+	currentUser := ctx.MustGet("currentUser").(model.User)
+	userID := int(currentUser.ID)
+
+	transactionData, err := th.transactionHistoryService.CreateTransactionTest(transaction, userID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	formatter := model.FormatTransaction(transactionData)
 	ctx.JSON(http.StatusOK, formatter)
 
 }
