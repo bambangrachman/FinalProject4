@@ -8,8 +8,7 @@ import (
 
 type TransactionHistoryService interface {
 	GetAllTransactionHistory(role string, UserID int) ([]model.TransactionHistory, error)
-	CreateTransactionHistory(transactionHistory model.TransactionHistory, UserID int) (model.TransactionHistory, error)
-	CreateTransactionTest(transactionHistory model.TransactionHistoryInput, UserID int) (model.TransactionHistory, error)
+	CreateTransaction(transactionHistory model.TransactionHistoryInput, UserID int) (model.CreateTransactionHistoryResponse, error)
 	DeleteTransactionHistory(id_task int, UserID int) error
 }
 
@@ -52,7 +51,7 @@ func (s *transactionHistoryService) GetAllTransactionHistory(role string, UserID
 	return []model.TransactionHistory{}, errors.New("Login first only user or admin role access this")
 }
 
-func (s *transactionHistoryService) CreateTransactionTest(transaction model.TransactionHistoryInput, UserID int) (model.TransactionHistory, error) {
+func (s *transactionHistoryService) CreateTransaction(transaction model.TransactionHistoryInput, UserID int) (model.CreateTransactionHistoryResponse, error) {
 
 	CreatedTransaction := model.TransactionHistory{
 		UserID:    UserID,
@@ -62,20 +61,20 @@ func (s *transactionHistoryService) CreateTransactionTest(transaction model.Tran
 
 	product, err := s.transactionHistoryRepository.FindById(transaction.ProductID)
 	if err != nil {
-		return CreatedTransaction, errors.New("product not found")
+		return model.CreateTransactionHistoryResponse{}, errors.New("product not found")
 	}
 
 	user, err := s.transactionHistoryRepository.GetUserByID(UserID)
 	if err != nil {
-		return CreatedTransaction, errors.New("user not found")
+		return model.CreateTransactionHistoryResponse{}, errors.New("user not found")
 	}
 
 	categoryData, err := s.transactionHistoryRepository.GetCategoryByID(product.CategoryID)
 	if err != nil {
-		return CreatedTransaction, errors.New("category not found")
+		return model.CreateTransactionHistoryResponse{}, errors.New("category not found")
 	}
 	if categoryData.ID == 0 {
-		return CreatedTransaction, errors.New("category not found")
+		return model.CreateTransactionHistoryResponse{}, errors.New("category not found")
 	}
 
 	total := product.Stock - transaction.Quantity
@@ -84,12 +83,12 @@ func (s *transactionHistoryService) CreateTransactionTest(transaction model.Tran
 
 	// Check Stock
 	if total < 0 {
-		return CreatedTransaction, errors.New("product's stock are not enough")
+		return model.CreateTransactionHistoryResponse{}, errors.New("product's stock are not enough")
 	}
 
 	// Check balance
 	if user.Balance < price {
-		return CreatedTransaction, errors.New("you don't have enough balance")
+		return model.CreateTransactionHistoryResponse{}, errors.New("you don't have enough balance")
 	}
 
 	// update Product
@@ -97,7 +96,7 @@ func (s *transactionHistoryService) CreateTransactionTest(transaction model.Tran
 
 	err = s.transactionHistoryRepository.EditProduct(product)
 	if err != nil {
-		return CreatedTransaction, err
+		return model.CreateTransactionHistoryResponse{}, err
 	}
 
 	// update balance
@@ -105,37 +104,32 @@ func (s *transactionHistoryService) CreateTransactionTest(transaction model.Tran
 
 	user, err = s.transactionHistoryRepository.UpdateBalance(user)
 	if err != nil {
-		return CreatedTransaction, err
+		return model.CreateTransactionHistoryResponse{}, err
 	}
 
 	// update Category
 	updatedCategory, err := s.transactionHistoryRepository.UpdateCategory(product.CategoryID, categoryData)
 	if err != nil {
-		return CreatedTransaction, errors.New("category not found")
+		return model.CreateTransactionHistoryResponse{}, errors.New("category not found")
 	}
 	if updatedCategory.ID == 0 {
-		return CreatedTransaction, errors.New("category not found")
+		return model.CreateTransactionHistoryResponse{}, errors.New("category not found")
 	}
 
 	//Create a new transaction
 	CreatedTransaction.TotalPrice = price
-	transactionResponse, err := s.transactionHistoryRepository.CreateTransactionHistory(CreatedTransaction)
+	_, err = s.transactionHistoryRepository.CreateTransactionHistory(CreatedTransaction)
 	if err != nil {
-		return transactionResponse, err
+		return model.CreateTransactionHistoryResponse{}, err
 	}
-	return transactionResponse, nil
-}
-
-func (s *transactionHistoryService) CreateTransactionHistory(transaction model.TransactionHistory, UserID int) (model.TransactionHistory, error) {
-
-	transactionHistory := model.TransactionHistory{
-		UserID:    UserID,
-		ProductID: transaction.ProductID,
-		Quantity:  transaction.Quantity,
+	transactionBill := model.TransactionBill{
+		TotalPrice:   price,
+		ProductTitle: product.Title,
+		Quantity:     transaction.Quantity,
 	}
-	transactionResponse, err := s.transactionHistoryRepository.CreateTransactionHistory(transactionHistory)
-	if err != nil {
-		return transactionResponse, err
+	transactionResponse := model.CreateTransactionHistoryResponse{
+		Message:         "Transaction Success",
+		TransactionBill: []model.TransactionBill{transactionBill},
 	}
 	return transactionResponse, nil
 }

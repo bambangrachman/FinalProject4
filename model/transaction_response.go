@@ -2,30 +2,21 @@ package model
 
 import "time"
 
-// func formatTransaction(transaction TransactionHistory) TransactionHistory {
-// 	formatter := TransactionHistory{
-// 		ProductID:  transaction.ProductID,
-// 		Quantity:   transaction.Quantity,
-// 		TotalPrice: transaction.TotalPrice,
+// func FormatTransaction(transaction TransactionHistory) CreateTransactionHistoryResponse {
+// 	formatter := CreateTransactionHistoryResponse{
+// 		Message: "You have successfully bought this product",
+// 		TransactionBill: struct {
+// 			TotalPrice   int    `json:"total_price"`
+// 			Quantity     int    `json:"quantity"`
+// 			ProductTitle string `json:"product_title"`
+// 		}{
+// 			TotalPrice:   transaction.TotalPrice,
+// 			Quantity:     transaction.Quantity,
+// 			ProductTitle: transaction.Product.Title,
+// 		},
 // 	}
 // 	return formatter
 // }
-
-func FormatTransaction(transaction TransactionHistory) CreateTransactionHistoryResponse {
-	formatter := CreateTransactionHistoryResponse{
-		Message: "You have successfully bought this product",
-		TransactionBill: struct {
-			TotalPrice   int    `json:"total_price"`
-			Quantity     int    `json:"quantity"`
-			ProductTitle string `json:"product_title"`
-		}{
-			TotalPrice:   transaction.TotalPrice,
-			Quantity:     transaction.Quantity,
-			ProductTitle: transaction.Product.Title,
-		},
-	}
-	return formatter
-}
 
 func FormatGetUserTransaction(transaction []TransactionHistory) GetUserTransactionHistory {
 	var formatter GetUserTransactionHistory
