@@ -50,15 +50,15 @@ func (s *categoriesService) PatchCategory(role_user string, id_category int, cat
 		Type: categories.Type,
 	}
 
-	updatedCategory, err := s.CategoriesRepository.UpdateCategory(id_category, category)
+	_, err := s.CategoriesRepository.UpdateCategory(id_category, category)
 	if err != nil {
 		return model.Category{}, err
 	}
-	if updatedCategory.ID == 0 {
-		return model.Category{}, errors.New("category not found")
-	}
 
 	categoryData, err := s.CategoriesRepository.GetCategoryByID(id_category)
+	if categoryData.ID == 0 {
+		return model.Category{}, errors.New("category not found")
+	}
 
 	return categoryData, err
 }
