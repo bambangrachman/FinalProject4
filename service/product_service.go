@@ -66,7 +66,7 @@ func (p *productService) DeleteProduct(role_user string, id int) error {
 
 	deletedProduct, err := p.productRepository.FindById(id)
 	if err != nil {
-		return err
+		return errors.New("There's nothing!")
 	}
 
 	err = p.productRepository.DeleteProduct(deletedProduct)

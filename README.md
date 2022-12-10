@@ -200,7 +200,7 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
         ```
 * GET :
     * Untuk menampilkan semua product dapat dengan menggunakan url :
-    `http://localhost:8080/products` dengan method **GET**
+    `http://localhost:8080/products` atau `https://fp4-kelompok4.up.railway.app/products` dengan method **GET**
     * Output response yang dihasilkan adalah :
         ```json
         [
@@ -227,7 +227,7 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
 
 * POST :
     * Untuk menambahkan product baru dapat dengan menggunakan url :
-    `http://localhost:8080/products` dengan method **POST**
+    `http://localhost:8080/products` atau `https://fp4-kelompok4.up.railway.app/products` dengan method **POST**
     * Kemudian gunakan json berikut untuk membuat datanya:
         ```json
             {
@@ -252,7 +252,7 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
 
 * PUT :
     * Misalnya untuk mengedit data product dengan id 7 dapat dengan menggunakan url :
-    `http://localhost:8080/products/7` dengan method **PUT**
+    `http://localhost:8080/products/7` atau `https://fp4-kelompok4.up.railway.app/products/7` dengan method **PUT**
     * Kemudian gunakan json berikut untuk mengedit datanya:
         ```json
         {
@@ -276,7 +276,7 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
         ```
 * DELETE :
     * Misalnya untuk menghapus product dengan id 7 dapat dengan menggunakan url :
-    `http://localhost:8080/products/7` dengan method **DELETE**
+    `http://localhost:8080/products/7` atau `https://fp4-kelompok4.up.railway.app/products/7` dengan method **DELETE**
     * Untuk akses endpointnya dibutuhkan request autorisasi token yang didapatkan dari response endpoint user/login. (**Hanya bisa diakses oleh user dengan role ADMIN**)
     * Output response yang dihasilkan adalah :
         ```json

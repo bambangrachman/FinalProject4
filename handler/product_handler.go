@@ -38,16 +38,6 @@ func (p *productHandler) AddProduct(ctx *gin.Context) {
 		return
 	}
 
-	var prod model.AddProduct
-	err = ctx.ShouldBindJSON(&prod)
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "Category doesn't exist! Please input a valid id!" + err.Error(),
-		})
-		log.Println(err.Error())
-		return
-	}
-
 	productData, err := p.productService.AddProduct(role_user, product)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -76,16 +66,6 @@ func (p *productHandler) EditProduct(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&editProduct)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": err.Error()})
-		return
-	}
-
-	var prod model.AddProduct
-	err = ctx.ShouldBindJSON(&prod)
-	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"message": "Category doesn't exist! Please input a valid id!" + err.Error(),
-		})
-		log.Println(err.Error())
 		return
 	}
 
