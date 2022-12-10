@@ -50,27 +50,25 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
             {
                 "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpc3MiOiJoYWNrdGl2OC1maW5hbDMiLCJleHAiOjE2NzA0MDcxMDJ9.ktbiKmEpxkio2oIQ-Q2ckGUXJX-Uw-j6TaWkGBkxEQo"
             }
-        ```
 
-*Patch (Top Up) :
+* Patch (Top Up) :
     * Untuk melakukan top up balance user customer dapat dengan menggunakan url :
     `https://fp4-kelompok4.up.railway.app/user/topup`
     *berikan token pada headers
     * Kemudian gunakan json berikut untuk membuat datanya:
 
-    ```json
+    ```
             {
                 "balance" : 500
             }
-        ```
+    ```
     * Jika berhasil maka akan muncul response seperti berikut:
 
-    ```json
+    ```
             {
                "data": "Balance updated"
             }
      ```
-
 **CATEGORIES**
 * GET :
     * Untuk menampilkan semua data categories dapat dengan menggunakan url :
@@ -192,8 +190,8 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
 
 
 **PRODUCT**
-NOTES : Selain dari perintah **'GET'**, semua perintah lain hanya bisa diakses oleh admin. Jika customer melakukan perintah 'POST','DEL','PUT', maka akses akan ditolak dengan response seperti ini :
-    ```json
+<br> NOTES : Selain dari perintah **'GET'**, semua perintah lain hanya bisa diakses oleh admin. Jika customer melakukan perintah 'POST','DEL','PUT', maka akses akan ditolak dengan response seperti ini :
+   <br> ```
     {
         "error": "You aren't allowed to do this! You are not Admin!""
         }
