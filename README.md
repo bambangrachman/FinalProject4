@@ -284,3 +284,109 @@ Ini adalah project keempat dari program MSIB di Hacktiv8. Project kali ini adala
         "message": "Product has been successfully deleted"
         }
         ```
+
+**TRANSACTION HISTORY**
+* GET :
+    * Untuk menampilkan semua data transaction history dengan role admin dapat dengan menggunakan url :
+    `http://localhost:8080/transactions/user-transactions` atau `https://fp4-kelompok4.up.railway.app/transactions/user-transactions` dengan method **GET**
+    * Untuk dapat mengakses endpointnya dibutuhkan autorisasi token yang didapatkan dari response endpoint user/login. (**Hanya bisa diakses oleh user dengan role ADMIN**)
+    * Output response yang dihasilkan adalah :
+        ```json
+        {
+    "transaction_history": [
+        {
+            "id": 3,
+            "product_id": 2,
+            "user_id": 1,
+            "quantity": 3,
+            "total_price": 0,
+            "product": {
+                "id": 2,
+                "title": "Pocari Sweat",
+                "price": 8500,
+                "stock": 8,
+                "category_id": 1,
+                "created_at": "2022-12-07T08:33:10Z",
+                "updated_at": "2022-12-10T05:32:06Z"
+            },
+            "user": {
+                "id": 1,
+                "fullname": "Admin",
+                "email": "admin@admin.com",
+                "balance": 200,
+                "created_at": "2022-12-06T09:32:14Z",
+                "updated_at": "2022-12-06T09:35:46Z"
+            }
+        }
+                ]
+            }
+        
+        ```
+	
+ GET :
+    * Untuk menampilkan semua data transaction history dengan role customer dapat dengan menggunakan url :
+    `http://localhost:8080/transactions/my-transactions` atau `https://fp4-kelompok4.up.railway.app/transactions/my-transactions` dengan method **GET**
+    * Untuk dapat mengakses endpointnya dibutuhkan autorisasi token yang didapatkan dari response endpoint user/login.  
+    * Output response yang dihasilkan adalah :
+         ```json
+        {
+    "transaction_history": [
+        {
+            "id": 3,
+            "product_id": 2,
+            "user_id": 1,
+            "quantity": 3,
+            "total_price": 0,
+            "product": {
+                "id": 2,
+                "title": "Pocari Sweat",
+                "price": 8500,
+                "stock": 8,
+                "category_id": 1,
+                "created_at": "2022-12-07T08:33:10Z",
+                "updated_at": "2022-12-10T05:32:06Z"
+            }
+            
+        }
+                ]
+            }
+        
+        ```
+
+* POST :
+    * Untuk membuat data transaction baru dapat dengan menggunakan url :
+    `http://localhost:8080/transactions` atau `https://fp4-kelompok4.up.railway.app/transactions` dengan method **POST**
+    * Kemudian gunakan json berikut untuk membuat datanya:
+        ```json
+       {
+    "product_id" : 3,
+    "quantity" : 4
+}
+        ```
+    * Untuk akses endpointnya dibutuhkan request autorisasi token yang didapatkan dari response endpoint user/login.  
+    * Output response yang dihasilkan adalah :
+        ```json
+       {
+    "message": "Transaction Success",
+    "transaction_bill": [
+        {
+            "total_price": 8500,
+            "quantity": 1,
+            "product_title": "Pocari Sweat"
+        }
+    ]
+}
+        ```
+
+ 
+* DELETE :
+    * Untuk menghapus data transaction dengan id 6 dapat dengan menggunakan url :
+    `http://localhost:8080/transactions/6` atau `https://fp4-kelompok4.up.railway.app/transactions/6` dengan method **DELETE**
+    * Untuk akses endpointnya dibutuhkan request autorisasi token yang didapatkan dari response endpoint user/login.  
+    * Output response yang dihasilkan adalah :
+        ```json
+        {
+            "message": "transactions has been successfully deleted"
+        }
+        ```
+
